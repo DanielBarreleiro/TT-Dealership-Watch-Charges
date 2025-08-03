@@ -49,17 +49,7 @@ export async function onRequest(context) {
         if (!apiKey) {
             throw new Error("Secret 'YOUR_API_KEY' is not defined in Cloudflare settings.");
         }
-
-        // --- MOCK DATA (FOR TESTING) ---
-        // You can use this mock data to test your page before your API is ready.
-        // To use it, comment out the 'Real API Call' section below.
-        const mockApiData = generateMockData();
-        const dataToCache = mockApiData;
-        // --- END MOCK DATA ---
-
-
-        // --- REAL API CALL (UNCOMMENT WHEN READY) ---
-        /*
+        
         const apiResponse = await fetch(API_ENDPOINT, {
             headers: {
                 // Adjust the authorization header based on your API's requirements.
@@ -78,7 +68,7 @@ export async function onRequest(context) {
         // e.g., { "data": [{ "date": "2024-08-01", "value": 123 }, ...] }
         // If your API just returns the array, you can use: const dataToCache = apiData;
         const dataToCache = apiData.data; 
-        */
+        
         // --- END REAL API CALL ---
 
 
@@ -110,28 +100,3 @@ export async function onRequest(context) {
         });
     }
 }
-
-/**
- * Generates plausible mock data for the last 30 days for testing purposes.
- * @returns {Array<{date: string, value: number}>}
- */
-function generateMockData() {
-    const data = [];
-    const today = new Date();
-    let currentValue = 150 + Math.random() * 50;
-    for (let i = 29; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
-        
-        // Add some random fluctuation
-        currentValue += (Math.random() - 0.45) * 10;
-        if (currentValue < 50) currentValue = 50;
-
-        data.push({
-            date: date.toISOString().split('T')[0], // Format as YYYY-MM-DD
-            value: Math.round(currentValue)
-        });
-    }
-    return data;
-}
-
