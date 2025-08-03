@@ -63,7 +63,7 @@ export async function onRequest(context) {
         const apiResponse = await fetch(API_ENDPOINT, {
             headers: {
                 // Adjust the authorization header based on your API's requirements.
-                'Authorization': `Bearer ${apiKey}`
+                'X-Tycoon-Key': `${apiKey}`
             }
         });
 
