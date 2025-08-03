@@ -72,16 +72,10 @@
                 }
 
                 const result = await response.json();
-                const data = result.data; // Assuming the worker wraps the data
+                // The worker now returns historicalValues and historicalDates directly
+                const values = result.historicalValues;
+                const labels = result.historicalDates;
                 const timestamp = result.timestamp;
-
-                // --- Data Processing ---
-                // Assuming the API returns an array of objects like [{ date: '2024-07-20', value: 150 }, ...]
-                // We need to sort it just in case the API doesn't guarantee order.
-                data.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                const labels = data.map(item => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-                const values = data.map(item => item.value);
 
                 // --- Chart Rendering ---
                 renderChart(labels, values);
@@ -102,7 +96,12 @@
         function renderChart(labels, values) {
             const ctx = document.getElementById('dataChart').getContext('2d');
             
-            new Chart(ctx, {
+            // Destroy existing chart instance if it exists to prevent memory leaks
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, { // Store chart instance globally for destruction
                 type: 'line',
                 data: {
                     labels: labels,
