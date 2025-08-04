@@ -100,11 +100,11 @@
                 const timestamp = result.timestamp;
                 // Apply padding to historical data
                 const padded = padChartData(values, labels);
-                labels = padded.labels;
-                values = padded.values;
+                historicalDates = padded.labels;
+                historicalValues = padded.values;
 
                 // --- Chart Rendering ---
-                renderChart(labels, values);
+                renderChart(historicalDates, historicalValues);
                 
                 // --- UI Updates ---
                 loadingState.style.display = 'none';
