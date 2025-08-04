@@ -96,11 +96,11 @@
                 const result = await response.json();
                 // The worker now returns historicalValues and historicalDates directly
                 const values = result.historicalValues;
-                const labels = result.historicalDates;
+                const dates = result.historicalDates;
                 const timestamp = result.timestamp;
                 // Apply padding to historical data
-                const padded = padChartData(values, labels);
-                historicalDates = padded.labels;
+                const padded = padChartData(dates, values);
+                historicalDates = padded.dates;
                 historicalValues = padded.values;
 
                 // --- Chart Rendering ---
@@ -130,7 +130,7 @@
             window.myChart = new Chart(ctx, { // Store chart instance globally for destruction
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: historicalDates,
                     datasets: [
                         {
                             label: 'Daily Value',
