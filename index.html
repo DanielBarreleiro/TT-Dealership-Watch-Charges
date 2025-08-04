@@ -135,7 +135,7 @@
                     datasets: [
                         {
                             label: 'Daily Value',
-                            data: values,
+                            data: historicalValues,
                             borderColor: 'rgb(59, 130, 246)',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             fill: true,
@@ -147,7 +147,7 @@
                         {
                             label: 'Trendline',
                             type: 'line',
-                            data: values, // The plugin calculates the trend from this data
+                            data: historicalValues, // The plugin calculates the trend from this data
                             borderColor: 'rgb(234, 88, 12)',
                             backgroundColor: 'transparent',
                             borderWidth: 2,
