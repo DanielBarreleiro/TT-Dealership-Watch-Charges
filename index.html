@@ -62,35 +62,6 @@
             // Hide chart and error message initially
             chartContainer.style.display = 'none';
 
-            
-            function padChartData(dates, values) {
-                const MAX_DAYS = 30;
-                const paddedDates = [];
-                const paddedValues = [];
-
-                const today = new Date();
-                for (let i = MAX_DAYS - 1; i >= 0; i--) {
-                    const date = new Date(today);
-                    date.setDate(today.getDate() - i);
-                    const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-                    const index = dates.indexOf(formattedDate);
-                    if (index !== -1) {
-                        paddedDates.push(formattedDate);
-                        paddedValues.push(values[index]);
-                    } else {
-                        paddedDates.push(formattedDate);
-                        paddedValues.push(null); // No data for this day
-                    }
-                }
-                return { paddedDates, paddedValues };
-            }
-
-            // Apply padding to historical data
-            const padded = padChartData(historicalDates, historicalValues);
-            historicalDates = padded.paddedDates;
-            historicalValues = padded.paddedValues;
-
 
             try {
                 // This endpoint '/api/data' will be handled by your Cloudflare Worker.
@@ -122,6 +93,32 @@
                 errorMessage.textContent = error.message;
             }
         });
+
+        function padChartData(dates, values) {
+            const MAX_DAYS = 30;
+            const paddedDates = [];
+            const paddedValues = [];
+            const today = new Date();
+            for (let i = MAX_DAYS - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const index = dates.indexOf(formattedDate);
+                if (index !== -1) {
+                    paddedDates.push(formattedDate);
+                    paddedValues.push(values[index]);
+                } else {
+                    paddedDates.push(formattedDate);
+                    paddedValues.push(null); // No data for this day
+                }
+            }
+            return { paddedDates, paddedValues };
+        }
+        // Apply padding to historical data
+        const padded = padChartData(historicalDates, historicalValues);
+        historicalDates = padded.paddedDates;
+        historicalValues = padded.paddedValues;
+
 
         function renderChart(labels, values) {
             const ctx = document.getElementById('dataChart').getContext('2d');
